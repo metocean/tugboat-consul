@@ -13,17 +13,21 @@ parse_url = require('url').parse;
 
 host = os.hostname();
 
-if (process.env.TUG_HOST != null) {
-  host = process.env.TUG_HOST;
+if (process.env.TUGBOAT_HOST != null) {
+  host = process.env.TUGBOAT_HOST;
 }
 
-consulhost = 'http://192.168.59.103:8500';
+consulhost = 'http://127.0.0.1:8500';
+
+if (process.env.CONSUL_HOST != null) {
+  consulhost = process.env.CONSUL_HOST;
+}
 
 if (consulhost.indexOf('http://') !== 0) {
   consulhost = "http://" + consulhost;
 }
 
-key = "tugboathosts/" + host + "/";
+key = "tugboat/" + host + "/";
 
 path = "/v1/kv/" + key;
 
