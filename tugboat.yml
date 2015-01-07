@@ -1,0 +1,5 @@
+daemon:
+  image: webops_baseimage
+  command: ping google.com
+  environment:
+  - DOCKER_HOST

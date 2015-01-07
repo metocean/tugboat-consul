@@ -1,0 +1,11 @@
+daemon:
+  image: webops_baseimage
+  command: ping google.com
+  net: host
+  volumes:
+  - "#{DOCKER_CERT_PATH}:/certificates"
+  environment:
+  - DOCKER_HOST
+  - DOCKER_TLS_VERIFY
+  - DOCKER_CERT_PATH=/certificates
+  - "TEST_HOST=#{HOST}"

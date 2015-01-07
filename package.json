@@ -1,0 +1,32 @@
+{
+  "name": "tugboat-consul",
+  "version": "0.0.1",
+  "description": "Manage groups of dockers through consul",
+  "bin": {
+    "tugboat-consul": "bin/tugboat-consul.js"
+  },
+  "dependencies": {
+    "colors": "1.0.3",
+    "redwire-consul": "^1.1.0",
+    "tugboat": "*"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:metocean/tugboat-consul.git"
+  },
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha test/*.js --reporter spec"
+  },
+  "author": "Thomas Coats",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/metocean/tugboat-consul/issues"
+  },
+  "readmeFilename": "README.md",
+  "homepage": "https://github.com/metocean/tugboat-consul",
+  "devDependencies": {
+    "chai": "1.*",
+    "mocha": "2.*"
+  }
+}
