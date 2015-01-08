@@ -78,6 +78,7 @@ launch = ->
         
         for groupname, group of results
           continue unless hascontainers group
+          continue if group.name.indexOf('tugboat') is 0
           groupstocull.push group
         
         for group in groupstocull

@@ -8,4 +8,5 @@ daemon:
   - DOCKER_HOST
   - DOCKER_TLS_VERIFY
   - DOCKER_CERT_PATH=/certificates
-  - "TEST_HOST=#{HOST}"
+  - CONSUL_HOST=
+  - "TUGBOAT_HOST=#{HOST}"

@@ -150,6 +150,9 @@ launch = function() {
           if (!hascontainers(group)) {
             continue;
           }
+          if (group.name.indexOf('tugboat') === 0) {
+            continue;
+          }
           groupstocull.push(group);
         }
         _fn = function(group) {

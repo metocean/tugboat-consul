@@ -3,3 +3,5 @@ daemon:
   command: ping google.com
   environment:
   - DOCKER_HOST
+  - CONSUL_HOST=
+  - "TUGBOAT_HOST=#{HOST}"
