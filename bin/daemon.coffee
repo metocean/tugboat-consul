@@ -1,9 +1,13 @@
+require 'colors'
 Watch = require('redwire-consul').Watch
 Tugboat = require 'tugboat'
+Sequencer = require '../src/sequencer'
 os = require 'os'
 http = require 'http'
 parse_url = require('url').parse
-require 'colors'
+
+
+seq = new Sequencer()
 
 # Run things one after another - better for human reading
 series = (tasks, callback) ->
@@ -57,64 +61,72 @@ launch = ->
         return no if g.length is 0
         return no if g.indexOf('/') isnt -1
         yes
-    console.log "Update received from consul, groups enabled: #{groups.join ', '}."
-    console.log 'Querying tugboat...'
-    tugboat = new Tugboat.API()
-    tugboat.init (errors) ->
-      return temperrors errors if errors?
-      tugboat.diff (err, results) ->
-        tasks = []
-        groupstoupdate = []
-        groupstocull = []
-        
-        for g in groups
-          if !results[g]?
-            console.log "Group #{g} is (unknown) and has no containers... nothing to do"
-            continue
-          group = results[g]
-          delete results[g]
-          continue unless needsupdate group
-          groupstoupdate.push group
-        
-        for groupname, group of results
-          continue unless hascontainers group
-          continue if group.name.indexOf('tugboat') is 0
-          groupstocull.push group
-        
-        for group in groupstocull
-          do (group) ->
-            tasks.push (cb) ->
-              console.log "Culling group #{group.name}..."
-              tugboat.groupcull group, (errors, messages) ->
-                for err in errors
-                  if err.stack then console.error err.stack
-                  else console.error err
-                for message in messages
-                  console.log message
-                cb()
-        
-        for group in groupstoupdate
-          do (group) ->
-            tasks.push (cb) ->
-              if !group.isknown
-                console.log "Updating group #{group.name} (unknown)... will start anything stopped"
-              else
-                console.log "Updating group #{group.name}..."
-              tugboat.groupup group, (errors, messages) ->
-                for err in errors
-                  if err.stack then console.error err.stack
-                  else console.error err
-                for message in messages
-                  console.log message
-                cb()
-        
-        tasks.push (cb) ->
-          if groupstoupdate.length is 0 and groupstocull.length is 0
-            console.log "Everything is up to date"
-          else
-            console.log "Tugboat changes complete"
-        
-        series tasks, ->
+    seq.exec 'Update received from consul', (callback) ->
+      console.log "Update received from consul, groups enabled: #{groups.join ', '}."
+      console.log 'Querying tugboat...'
+      tugboat = new Tugboat.API()
+      tugboat.init (errors) ->
+        if errors?
+          temperrors errors
+          return callback()
+        tugboat.diff (err, results) ->
+          if err?
+            temperrors [err]
+            return callback()
+          
+          tasks = []
+          groupstoupdate = []
+          groupstocull = []
+          
+          for g in groups
+            if !results[g]?
+              console.log "Group #{g} is (unknown) and has no containers... nothing to do"
+              continue
+            group = results[g]
+            delete results[g]
+            continue unless needsupdate group
+            groupstoupdate.push group
+          
+          for groupname, group of results
+            continue unless hascontainers group
+            continue if group.name.indexOf('tugboat') is 0
+            groupstocull.push group
+          
+          for group in groupstocull
+            do (group) ->
+              tasks.push (cb) ->
+                console.log "Culling group #{group.name}..."
+                tugboat.groupcull group, (errors, messages) ->
+                  for err in errors
+                    if err.stack then console.error err.stack
+                    else console.error err
+                  for message in messages
+                    console.log message
+                  cb()
+          
+          for group in groupstoupdate
+            do (group) ->
+              tasks.push (cb) ->
+                if !group.isknown
+                  console.log "Updating group #{group.name} (unknown)... will start anything stopped"
+                else
+                  console.log "Updating group #{group.name}..."
+                tugboat.groupup group, (errors, messages) ->
+                  for err in errors
+                    if err.stack then console.error err.stack
+                    else console.error err
+                  for message in messages
+                    console.log message
+                  cb()
+          
+          tasks.push (cb) ->
+            if groupstoupdate.length is 0 and groupstocull.length is 0
+              console.log "Everything is up to date"
+            else
+              console.log "Tugboat changes complete"
+            cb()
+          
+          series tasks, callback
 
 # check if the folder exists, if not create it
 http

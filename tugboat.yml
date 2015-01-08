@@ -1,7 +1,8 @@
 daemon:
-  image: webops_baseimage
-  command: ping google.com
+  image: tugboat
+  volumes:
+  - "examples:/tugboat"
   environment:
-  - DOCKER_HOST
+  - DOCKER_HOST=
   - CONSUL_HOST=
   - "TUGBOAT_HOST=#{HOST}"

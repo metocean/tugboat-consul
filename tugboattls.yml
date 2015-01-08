@@ -1,12 +1,12 @@
 daemon:
-  image: webops_baseimage
-  command: ping google.com
+  image: tugboat
   net: host
   volumes:
   - "#{DOCKER_CERT_PATH}:/certificates"
+  - "examples:/tugboat"
   environment:
-  - DOCKER_HOST
-  - DOCKER_TLS_VERIFY
+  - DOCKER_HOST=
+  - DOCKER_TLS_VERIFY=
   - DOCKER_CERT_PATH=/certificates
   - CONSUL_HOST=
   - "TUGBOAT_HOST=#{HOST}"
