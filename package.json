@@ -1,6 +1,6 @@
 {
   "name": "tugboat-consul",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "Manage groups of dockers through consul",
   "bin": {
     "tugboat-consul": "bin/tugboat-consul.js"

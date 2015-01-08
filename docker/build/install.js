@@ -14,3 +14,11 @@ cp('consul/run.sh', '/etc/service/consul/run');
 cp('consul/bin/consul', '/usr/local/bin/consul');
 
 '2'.to('/etc/container_environment/GOMAXPROCS');
+
+exec('npm install -g tugboat-consul tugboat ducke');
+
+cp('-R', 'tugboat', '/tugboat');
+
+mkdir('/etc/service/tugboat');
+
+cp('tugboat/run.sh', '/etc/service/tugboat/run');

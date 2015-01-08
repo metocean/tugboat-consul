@@ -14,6 +14,6 @@ ENV HOME /root
 CMD ["/sbin/my_init", "--quiet"]
 
 # Run build script
-ADD build /baseimage
-WORKDIR /baseimage
-RUN nodejs /baseimage/install.js
+ADD build /build
+WORKDIR /build
+RUN nodejs /build/install.js
