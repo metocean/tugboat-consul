@@ -147,6 +147,9 @@ launch = function() {
             if (group.name.indexOf('tugboat') === 0) {
               continue;
             }
+            if (group.name.indexOf('_') === 0) {
+              continue;
+            }
             groupstocull.push(group);
           }
           _fn = function(group) {
