@@ -1,13 +1,13 @@
 {
   "name": "tugboat-consul",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Manage groups of dockers through consul",
   "bin": {
     "tugboat-consul": "bin/tugboat-consul.js"
   },
   "dependencies": {
     "colors": "1.0.3",
-    "redwire-consul": "^1.1.0",
+    "consul-utils": "^1.1.0",
     "tugboat": "*"
   },
   "repository": {
