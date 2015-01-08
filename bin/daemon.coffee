@@ -5,20 +5,11 @@ Sequencer = require '../src/sequencer'
 os = require 'os'
 http = require 'http'
 parse_url = require('url').parse
+series = require '../src/series'
 
-
+# Multiple updates can come through even when we are still processing
+# This lets us queue / run the updates in sequence
 seq = new Sequencer()
-
-# Run things one after another - better for human reading
-series = (tasks, callback) ->
-  tasks = tasks.slice 0
-  next = (cb) ->
-    return cb() if tasks.length is 0
-    task = tasks.shift()
-    task -> next cb
-  result = (cb) -> next cb
-  result(callback) if callback?
-  result
 
 host = os.hostname()
 host = process.env.TUGBOAT_HOST if process.env.TUGBOAT_HOST?
@@ -32,8 +23,9 @@ path = "/v1/kv/#{key}"
 url = "#{consulhost}#{path}?keys"
 
 temperrors = (errors) ->
-  for e in errors
-    console.error e
+  for err in errors
+    if err.stack then console.error err.stack
+    else console.error err
 
 fatalerror = (e) ->
   console.error e
@@ -55,6 +47,7 @@ needsupdate = (group) ->
 launch = ->
   console.log "Tugboat Consul is running for host #{host}..."
   new Watch url, (groups) ->
+    # ignore host key (folder) and any sub keys
     groups = groups
       .map (g) -> g.substr key.length
       .filter (g) ->
@@ -97,9 +90,7 @@ launch = ->
               tasks.push (cb) ->
                 console.log "Culling group #{group.name}..."
                 tugboat.groupcull group, (errors, messages) ->
-                  for err in errors
-                    if err.stack then console.error err.stack
-                    else console.error err
+                  temperrors errors
                   for message in messages
                     console.log message
                   cb()
@@ -112,11 +103,8 @@ launch = ->
                 else
                   console.log "Updating group #{group.name}..."
                 tugboat.groupup group, (errors, messages) ->
-                  for err in errors
-                    if err.stack then console.error err.stack
-                    else console.error err
-                  for message in messages
-                    console.log message
+                  temperrors errors
+                  console.log message for message in messages
                   cb()
           
           tasks.push (cb) ->

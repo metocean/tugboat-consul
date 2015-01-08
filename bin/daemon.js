@@ -15,29 +15,9 @@ http = require('http');
 
 parse_url = require('url').parse;
 
-seq = new Sequencer();
+series = require('../src/series');
 
-series = function(tasks, callback) {
-  var next, result;
-  tasks = tasks.slice(0);
-  next = function(cb) {
-    var task;
-    if (tasks.length === 0) {
-      return cb();
-    }
-    task = tasks.shift();
-    return task(function() {
-      return next(cb);
-    });
-  };
-  result = function(cb) {
-    return next(cb);
-  };
-  if (callback != null) {
-    result(callback);
-  }
-  return result;
-};
+seq = new Sequencer();
 
 host = os.hostname();
 
@@ -62,11 +42,15 @@ path = "/v1/kv/" + key;
 url = "" + consulhost + path + "?keys";
 
 temperrors = function(errors) {
-  var e, _i, _len, _results;
+  var err, _i, _len, _results;
   _results = [];
   for (_i = 0, _len = errors.length; _i < _len; _i++) {
-    e = errors[_i];
-    _results.push(console.error(e));
+    err = errors[_i];
+    if (err.stack) {
+      _results.push(console.error(err.stack));
+    } else {
+      _results.push(console.error(err));
+    }
   }
   return _results;
 };
@@ -169,17 +153,10 @@ launch = function() {
             return tasks.push(function(cb) {
               console.log("Culling group " + group.name + "...");
               return tugboat.groupcull(group, function(errors, messages) {
-                var message, _k, _l, _len2, _len3;
-                for (_k = 0, _len2 = errors.length; _k < _len2; _k++) {
-                  err = errors[_k];
-                  if (err.stack) {
-                    console.error(err.stack);
-                  } else {
-                    console.error(err);
-                  }
-                }
-                for (_l = 0, _len3 = messages.length; _l < _len3; _l++) {
-                  message = messages[_l];
+                var message, _k, _len2;
+                temperrors(errors);
+                for (_k = 0, _len2 = messages.length; _k < _len2; _k++) {
+                  message = messages[_k];
                   console.log(message);
                 }
                 return cb();
@@ -198,17 +175,10 @@ launch = function() {
                 console.log("Updating group " + group.name + "...");
               }
               return tugboat.groupup(group, function(errors, messages) {
-                var message, _l, _len3, _len4, _m;
-                for (_l = 0, _len3 = errors.length; _l < _len3; _l++) {
-                  err = errors[_l];
-                  if (err.stack) {
-                    console.error(err.stack);
-                  } else {
-                    console.error(err);
-                  }
-                }
-                for (_m = 0, _len4 = messages.length; _m < _len4; _m++) {
-                  message = messages[_m];
+                var message, _l, _len3;
+                temperrors(errors);
+                for (_l = 0, _len3 = messages.length; _l < _len3; _l++) {
+                  message = messages[_l];
                   console.log(message);
                 }
                 return cb();
