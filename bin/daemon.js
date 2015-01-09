@@ -194,9 +194,9 @@ launch = function() {
           }
           tasks.push(function(cb) {
             if (groupstoupdate.length === 0 && groupstocull.length === 0) {
-              console.log("Everything is up to date");
+              console.log('Everything is up to date');
             } else {
-              console.log("Tugboat changes complete");
+              console.log('Tugboat changes complete');
             }
             return cb();
           });

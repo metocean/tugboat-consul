@@ -110,9 +110,9 @@ launch = ->
           
           tasks.push (cb) ->
             if groupstoupdate.length is 0 and groupstocull.length is 0
-              console.log "Everything is up to date"
+              console.log 'Everything is up to date'
             else
-              console.log "Tugboat changes complete"
+              console.log 'Tugboat changes complete'
             cb()
           
           series tasks, callback
