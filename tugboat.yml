@@ -1,6 +1,7 @@
 daemon:
-  image: tugboat
+  build: ./docker/
   volumes:
+  - "examples:/consul"
   - "examples:/tugboat"
   environment:
   - DOCKER_HOST=

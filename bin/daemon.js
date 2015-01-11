@@ -3,7 +3,7 @@ var Sequencer, Tugboat, Watch, consulhost, fatalerror, hascontainers, host, http
 
 require('colors');
 
-Watch = require('redwire-consul').Watch;
+Watch = require('consul-utils').Watch;
 
 Tugboat = require('tugboat');
 

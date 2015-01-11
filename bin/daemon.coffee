@@ -1,5 +1,5 @@
 require 'colors'
-Watch = require('redwire-consul').Watch
+Watch = require('consul-utils').Watch
 Tugboat = require 'tugboat'
 Sequencer = require '../src/sequencer'
 os = require 'os'
