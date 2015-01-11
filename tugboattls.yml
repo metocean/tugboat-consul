@@ -1,6 +1,5 @@
 daemon:
   build: ./docker/
-  net: host
   volumes:
   - "#{DOCKER_CERT_PATH}:/certificates"
   - "examples:/consul"
