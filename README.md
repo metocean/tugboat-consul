@@ -26,6 +26,6 @@ The daemon expects to be run inside a directory of `.yml` files in the normal tu
 
 # Docker Container
 
-A docker container has been provided that bundles Consul 1.4 and Tugboat Consul. Check out tugboat.yml and the examples folder for configuration.
+A docker container has been provided that bundles Consul 1.4 and Tugboat Consul. Check out tugboat.yml, tugboattls.yml and the examples folder for configuration.
 
 The image will be available on the docker hub as `metocean/tugboat` soon.
