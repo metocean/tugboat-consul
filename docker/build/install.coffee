@@ -18,7 +18,7 @@ mkdir '/consul-data'
 # Install tugboat-consul
 exec 'npm install -g tugboat ducke tugboat-consul'
 mkdir '/etc/service/tugboat'
-cp 'tugboat/run.sh', '/etc/service/tugboat/run'
+cp 'tugboat.sh', '/etc/service/tugboat/run'
 
 # Volumes to read configuration data from.
 # They can all be mounted as the same volume if desired

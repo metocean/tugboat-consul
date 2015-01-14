@@ -5,5 +5,4 @@ daemon:
   - "examples:/tugboat"
   environment:
   - DOCKER_HOST=
-  - CONSUL_HOST=
   - "TUGBOAT_HOST=#{HOST}"

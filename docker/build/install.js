@@ -23,7 +23,7 @@ exec('npm install -g tugboat ducke tugboat-consul');
 
 mkdir('/etc/service/tugboat');
 
-cp('tugboat/run.sh', '/etc/service/tugboat/run');
+cp('tugboat.sh', '/etc/service/tugboat/run');
 
 mkdir('/consul');
 
