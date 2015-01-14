@@ -83,7 +83,10 @@ launch = ->
           for groupname, group of results
             continue unless hascontainers group
             continue if group.name.indexOf('tugboat') is 0
+            continue if group.name.indexOf('infra-') is 0
+            continue if group.name.indexOf('ignore-') is 0
             continue if group.name.indexOf('_') is 0
+            continue if group.name.indexOf('-') is 0
             groupstocull.push group
           
           for group in groupstocull
